@@ -1,0 +1,77 @@
+---
+title: "team"
+author: "Brett Santema  github: bsantema"
+date: "2/26/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+df <- readxl::read_xls("GSS.xls")
+
+
+library("ggplot2")
+
+names(df) <- c("year", "guns", "wealth", "techInterest", "happiness", "party", "sex", "age", "married", "id", "ballot")
+
+```
+
+## 1
+```{r}
+plot <- ggplot(data=df,  aes(x=happiness, fill=married)) 
+plot + geom_bar()
+```
+
+As we can see by the plot, a large number of people under the 'pretty happy' and 'very happy' categories are married. Of the people that are unhappy, it seems to be spread pretty even across the different marital statuses. 
+
+## 2
+```{r}
+plot + geom_bar() + facet_wrap(~sex)
+```
+
+Happiness levels look to be about the same between the male and female charts, although it looks like more females overall responded to the survey. 
+
+## 3
+```{r}
+plot <- ggplot(data=df,  aes(x=happiness, fill=party))
+plot + geom_bar() 
+```
+
+Looking at strong democrats and strong republicans, it seems that republicans are happier overall than democrats. This makes sense as democrats typically want more change and are thus not happy with the way things currently are. 
+
+## 4: Which political party owns more guns?
+```{r}
+dfGuns <- df[df$guns != 'Not applicable', ]
+plot <- ggplot(data=dfGuns,  aes(x=guns, fill=party))
+plot + geom_bar() 
+```
+
+To make the data readable we first removed all repondents who have zero guns in the household. Now, we can see the breakdown of what party has 1, 2, 3 guns in the household. There is a slight tendency for republicans to own more guns, but overall it is pretty close with republicans only owning slightly more guns. This is less than I thought, since the Republican party is typically more pro-gun. I am also surprised by how few people reported owning guns overall. 
+
+## 5: Does age influence wealth?
+```{r}
+
+
+dfWealth <- df[df$wealth != 'Not applicable', ]
+plot <- ggplot(data=dfWealth,  aes(x=age, fill=wealth))
+plot + geom_bar() 
+```
+Wealth does not seem heavily based on age. 
+
+## 6: Does interest in technology vary by age?
+```{r}
+dfTech <- df[df$techInterest != 'Not applicable', ]
+plot <- ggplot(data=dfTech,  aes(x=age, fill=techInterest))
+plot + geom_bar() 
+```
+
+For all age groups, it appears that most people are either very interested or mildly interested in technology, with only a small portion saying they are not at all interested. This proportion seems to stay relatively constant over time. 
+
+## 7: Does age influence political party?
+```{r}
+plot <- ggplot(data=df,  aes(x=age, fill=party))
+plot + geom_bar() 
+```
+
+Proportionally, we can see that more republicans are in the older age groups, while more democrats are in the younger age groups. It looks like republicans stay constant over time while democrats decrease as they get older. 
